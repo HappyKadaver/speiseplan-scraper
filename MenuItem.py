@@ -65,5 +65,24 @@ if __name__ == "__main__":
     with urllib.request.urlopen(request) as response:
         html = response.read()
 
+    print("thm-mensa")
+
+    for item in parseMenuItems(html):
+        print(vars(item))
+
+    data = {'func':'make_spl',
+            'locId':'campustor',
+            'lang':'de', 'date':'2015-11-17'}
+
+    data = urllib.parse.urlencode(data)
+    data = data.encode('utf-8')
+
+    request = urllib.request.Request(url, data)
+
+    with urllib.request.urlopen(request) as response:
+        html = response.read()
+
+    print("campustor")
+
     for item in parseMenuItems(html):
         print(vars(item))
