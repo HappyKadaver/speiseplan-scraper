@@ -1,4 +1,5 @@
 from bs4 import BeautifulSoup
+import string
 
 class MenuItem:
     """
@@ -8,7 +9,7 @@ class MenuItem:
     def __init__(self, name, price, description="", counter=None):
         self.name = name
         self.price = price
-        self.subtext = description
+        self.description = description
         self.counter = counter
 
 
@@ -22,8 +23,26 @@ def parseMenuItems(html):
     result=[]
     parsed = BeautifulSoup(html, "html.parser")
 
-    for article in parsed.find_all("span", attrs={"class":"artikel"}):
-        result.append(MenuItem(article.contents[0], -1))
+    for row in parsed.find_all("tr"):
+        name = None
+        description = ""
+
+        price_tag = row.find("td", attrs={"class":"cell3"})
+
+        if(price_tag is None or price_tag.text == "\n\xa0"):
+            continue
+
+        for title in row.find_all("span", attrs={"class":"artikel"}):
+            name = title.contents[0]
+            description_tag = title.find_next_sibling("span")
+
+            for s in description_tag.contents:
+                if isinstance(s, str):
+                    description += s
+
+        price = price_tag.text.strip()
+
+        result.append(MenuItem(name, price, description))
 
     return result
 
@@ -36,7 +55,7 @@ if __name__ == "__main__":
     url = "http://www.maxmanager.de/daten-extern/sw-giessen/html/speiseplan-render.php"
     data = {'func':'make_spl',
             'locId':'mensa-thm-in-giessen',
-            'lang':'de', 'date':'2015-11-16'}
+            'lang':'de', 'date':'2015-11-17'}
 
     data = urllib.parse.urlencode(data)
     data = data.encode('utf-8')
