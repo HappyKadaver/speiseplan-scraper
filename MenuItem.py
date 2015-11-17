@@ -41,6 +41,7 @@ def parseMenuItems(html):
                     description += s
 
         price = price_tag.text.strip()
+        price = price.split(" / ")
 
         result.append(MenuItem(name, price, description))
 
