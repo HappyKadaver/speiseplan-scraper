@@ -22,10 +22,16 @@ def parseMenuItems(html):
 
     result=[]
     parsed = BeautifulSoup(html, "html.parser")
+    current_counter = None
 
     for row in parsed.find_all("tr"):
         name = None
         description = ""
+
+        counter_tag = row.find("td", attrs={"class":"color-pk-dark"})
+
+        if counter_tag is not None:
+            current_counter = counter_tag.text
 
         price_tag = row.find("td", attrs={"class":"cell3"})
 
@@ -43,7 +49,7 @@ def parseMenuItems(html):
         price = price_tag.text.strip()
         price = price.split(" / ")
 
-        result.append(MenuItem(name, price, description))
+        result.append(MenuItem(name, price, description=description, counter=current_counter))
 
     return result
 
