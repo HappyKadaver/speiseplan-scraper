@@ -5,11 +5,12 @@ class MenuItem:
 
     """
 
-    def __init__(self, name, price, description="", counter=None):
+    def __init__(self, name, price, description="", counter=None, image=None):
         self.name = name
         self.price = price
         self.description = description
         self.counter = counter
+        self.image = image
 
 
 def parseMenuItems(html):
@@ -45,10 +46,13 @@ def parseMenuItems(html):
                 if isinstance(s, str):
                     description += s
 
+        image = row.find("td", attrs={"class": "cell0"}).find("img")["src"]
+        image = image.replace("html/fotos", "html/fotos/big")
+
         price = price_tag.text.strip()
         price = price.split(" / ")
 
-        result.append(MenuItem(name, price, description=description, counter=current_counter))
+        result.append(MenuItem(name, price, description=description, counter=current_counter, image=image))
 
     return result
 
