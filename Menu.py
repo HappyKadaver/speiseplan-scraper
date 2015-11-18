@@ -4,6 +4,18 @@ import datetime
 
 __MENSA_URL = "http://www.maxmanager.de/daten-extern/sw-giessen/html/speiseplan-render.php"
 __NO_IMAGE_URL = "http://www.maxmanager.de/daten-extern/sw-giessen/html/fotos/big/4r17s_bild_folgt_foto!.jpg"
+available_locations = [
+    "mensa-otto-behaghel-strasse",
+    "otto-eger-heim",
+    "mensa-thm-in-giessen",
+    "mensa-thm-in-friedberg",
+    "fulda",
+    "cafe-kunstweg",
+    "campustor",
+    "care",
+    "cafeteria-ifz",
+    "juwi"]
+
 
 class MenuItem:
     """
@@ -16,6 +28,14 @@ class MenuItem:
         self.description = description
         self.counter = counter
         self.image = image
+
+
+    def to_markdown(self):
+        return "**%s** %s\n*%s€*" % (self.name, self.description, "€ / ".join(self.price))
+
+
+    def __str__(self):
+        return "%s: %s\nprice: %s\ncounter: %s\nimage: %s" % (self.name, self.description, self.price[0], self.counter, self.image)
 
 
 def parseMenuItems(html):
@@ -82,7 +102,17 @@ def _read_html(url:str, data):
 def parse(location:str="mensa-thm-in-giessen", date:str=str(datetime.date.today())):
     """
 
-    :param location: either "mensa-thm-in-giessen" or "campustor"
+    :param location: one of
+    "mensa-otto-behaghel-strasse",
+    "otto-eger-heim",
+    "mensa-thm-in-giessen",
+    "mensa-thm-in-friedberg",
+    "fulda",
+    "cafe-kunstweg",
+    "campustor",
+    "care",
+    "cafeteria-ifz",
+    "juwi"
     :param date:
     :return:
     """
@@ -94,12 +124,9 @@ def parse(location:str="mensa-thm-in-giessen", date:str=str(datetime.date.today(
 
 
 if __name__ == "__main__":
-    print("campustor")
-
-    for item in parse_campustor():
-        print(vars(item))
-
-    print("mensa")
-
-    for item in parse_mensa(str(datetime.date(2015, 11, 18))):
-        print(vars(item))
+    for location in available_locations:
+        print(location)
+        for item in parse(location):
+            # print(item)
+            print(item.to_markdown())
+            print("----------------------------------------")
