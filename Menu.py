@@ -4,17 +4,18 @@ import datetime
 
 __MENSA_URL = "http://www.maxmanager.de/daten-extern/sw-giessen/html/speiseplan-render.php"
 __NO_IMAGE_URL = "http://www.maxmanager.de/daten-extern/sw-giessen/html/fotos/big/4r17s_bild_folgt_foto!.jpg"
-available_locations = [
-    "mensa-otto-behaghel-strasse",
-    "otto-eger-heim",
-    "mensa-thm-in-giessen",
-    "mensa-thm-in-friedberg",
-    "fulda",
-    "cafe-kunstweg",
-    "campustor",
-    "care",
-    "cafeteria-ifz",
-    "juwi"]
+available_locations = {
+    "mensa-otto-behaghel-strasse": ["mensa.*?behaghel"],
+    "otto-eger-heim": [],
+    "mensa-thm-in-giessen": ["mensa.*?thm", "thm.*?mensa", "thmensa"],
+    "mensa-thm-in-friedberg": [],
+    "fulda": [],
+    "cafe-kunstweg": [],
+    "campustor": [["thm", "kleine", "mensa"],"thm.*?kleine.*?mensa", "campustor"],
+    "care": [],
+    "cafeteria-ifz": [],
+    "juwi": []
+}
 
 
 class MenuItem:
