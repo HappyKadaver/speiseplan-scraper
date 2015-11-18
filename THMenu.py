@@ -79,17 +79,15 @@ def _read_html(url:str, data):
         return response.read()
 
 
-def parse_mensa(date:str=str(datetime.date.today())):
-    data = _create_request_data({'func': 'make_spl',
-            'locId': 'mensa-thm-in-giessen',
-            'lang': 'de',
-            'date': date})
-    return parseMenuItems(_read_html(__MENSA_URL, data))
+def parse(location:str="mensa-thm-in-giessen", date:str=str(datetime.date.today())):
+    """
 
-
-def parse_campustor(date:str=str(datetime.date.today())):
+    :param location: either "mensa-thm-in-giessen" or "campustor"
+    :param date:
+    :return:
+    """
     data = _create_request_data({'func': 'make_spl',
-            'locId': 'campustor',
+            'locId': location,
             'lang': 'de',
             'date': date})
     return parseMenuItems(_read_html(__MENSA_URL, data))
